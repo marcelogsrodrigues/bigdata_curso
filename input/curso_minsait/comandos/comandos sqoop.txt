@@ -1,0 +1,1 @@
+sqoop eval --connect jdbc:mysql://database/employees --username=root --password=secret --query "SELECT * FROM employees limit 15"
