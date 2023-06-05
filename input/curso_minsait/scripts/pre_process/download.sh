@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BASEDIR="$( cd "$( dirname "$(BASE_SOURCE[0]}" )" && pwd )"
+BASEDIR="$( cd "$( dirname "${BASE_SOURCE[0]}" )" && pwd )"
 CONFIG="${BASEDIR}/../../config/config.sh"
 source "${CONFIG}"
 
@@ -22,7 +22,6 @@ do
 done
 
 echo "Finalizando a criacao em ${DATE}"
-
 
 
 # carga unitaria
