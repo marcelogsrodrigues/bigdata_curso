@@ -10,14 +10,16 @@ for table in "${TABLES[@]}"
 do
     echo "tabela $table"
     cd ../../raw
-    mkdir $table
-    chmod 777 $table
+    #mkdir $table
+    #chmod 777 $table
     cd $table
-    curl -O https://raw.githubusercontent.com/caiuafranca/dados_curso/main/$table.csv
+    #curl -O https://raw.githubusercontent.com/caiuafranca/dados_curso/main/$table.csv
 
-    #hdfs dfs -mkdir /tatalake/raw/$table
-    #hdfs dfs -chmod 777 /datalae/raw/$table
-    #hdfs dfs -copyFromLocal $table.csv /datalake/raw/$table
+    #carregar no hdfs
+    hdfs dfs -mkdir /datalake/raw/$table
+    hdfs dfs -chmod 777 /datalake/raw/$table
+    hdfs dfs -copyFromLocal $table.csv /datalake/raw/$table
+
     #beeline -u jdbc:hive2://localhost:10000 -f ../../scripts/hql/create_table_$table.hql
 done
 
