@@ -20,6 +20,7 @@ do
     hdfs dfs -chmod 777 /datalake/raw/$table
     hdfs dfs -copyFromLocal $table.csv /datalake/raw/$table
 
+    #criar tabelas no hql
     #beeline -u jdbc:hive2://localhost:10000 -f ../../scripts/hql/create_table_$table.hql
 done
 
