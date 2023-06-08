@@ -1,11 +1,11 @@
--- Tabela[categoria|tbl_categoria]|--id_categoria|ds_categoria|perc_parceiro
+-- Tabela[filial|tbl_filial]|--id_filial|ds_filial|id_cidade
 -- Tabela Externa 
-CREATE EXTERNAL TABLE IF NOT EXISTS ${TARGET_DATABASE}.categoria(
-    id_categoria  string,
-    ds_categoria  string,
-    perc_parceiro string
+CREATE EXTERNAL TABLE IF NOT EXISTS ${TARGET_DATABASE}.filial(
+    id_filial  string,
+    ds_filial  string,
+    id_cidade string
 )
-COMMENT 'Tabela de categoria'
+COMMENT 'Tabela de filial'
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY '|'
 STORED AS TEXTFILE
@@ -13,10 +13,10 @@ location '${HDFS_DIR}'
 TBLPROPERTIES ("skip.header.line.count"="1");
 
 -- Tabela Gerenciada particionada
-CREATE TABLE IF NOT EXISTS ${TARGET_DATABASE}.tbl_categoria (
-id_categoria string,
-ds_categoria string,
-perc_parceiro string
+CREATE TABLE IF NOT EXISTS ${TARGET_DATABASE}.tbl_filial (
+id_filial string,
+ds_filial string,
+id_cidade string
 )
 PARTITIONED BY (DT_FOTO STRING)
 ROW FORMAT SERDE 'org.apache.hadoop.hive.ql.io.orc.OrcSerde'
@@ -29,12 +29,12 @@ set hive.exec.dynamic.partition.mode=nonstrict;
 
 -- Carga 
 INSERT OVERWRITE TABLE 
-  ${TARGET_DATABASE}.tbl_categoria
+  ${TARGET_DATABASE}.tbl_filial
 PARTITION(DT_FOTO)
 SELECT
-  id_categoria string,
-  ds_categoria string,
-  perc_parceiro string,
+  id_filial string,
+  ds_filial string,
+  id_cidade string,
   ${PARTICAO} as DT_FOTO
-FROM ${TARGET_DATABASE}.$categoria
+FROM ${TARGET_DATABASE}.$filial
 ;
