@@ -1,19 +1,18 @@
--- Tabela[subcategoria|tbl_subcategoria]|--id_subcategoria|ds_subcategoria|id_categoria|
 -- Tabela Externa 
-CREATE EXTERNAL TABLE IF NOT EXISTS ${TARGET_DATABASE}.subcategoria(
-    id_subcategoria  string,
-    ds_subcategoria  string,
-    id_categoria string
+CREATE EXTERNAL TABLE IF NOT EXISTS aula_hive.subcategoria(
+  id_subcategoria string,
+  ds_subcategoria string,
+  id_categoria string
 )
 COMMENT 'Tabela de subcategoria'
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY '|'
 STORED AS TEXTFILE
-location '${HDFS_DIR}'
+location '/datalake/raw/subcategoria/'
 TBLPROPERTIES ("skip.header.line.count"="1");
 
 -- Tabela Gerenciada particionada
-CREATE TABLE IF NOT EXISTS ${TARGET_DATABASE}.tbl_subcategoria (
+CREATE TABLE IF NOT EXISTS aula_hive.tbl_subcategoria (
 id_subcategoria string,
 ds_subcategoria string,
 id_categoria string
@@ -29,12 +28,12 @@ set hive.exec.dynamic.partition.mode=nonstrict;
 
 -- Carga 
 INSERT OVERWRITE TABLE 
-  ${TARGET_DATABASE}.tbl_subcategoria
+  aula_hive.tbl_subcategoria
 PARTITION(DT_FOTO)
 SELECT
   id_subcategoria string,
   ds_subcategoria string,
   id_categoria string,
-  ${PARTICAO} as DT_FOTO
-FROM ${TARGET_DATABASE}.$subcategoria
+  '06062023' as DT_FOTO
+FROM aula_hive.subcategoria
 ;

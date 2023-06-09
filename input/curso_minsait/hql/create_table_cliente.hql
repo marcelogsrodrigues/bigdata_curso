@@ -1,15 +1,14 @@
--- Tabela[cliente|tbl_cliente]|--id_cliente|nm_cliente|flag_ouro|
 -- Tabela Externa 
 CREATE EXTERNAL TABLE IF NOT EXISTS ${TARGET_DATABASE}.cliente(
   id_cliente string,
   nm_cliente string,
   flag_ouro string
 )
-COMMENT 'Tabela de categoria'
+COMMENT 'Tabela de cliente'
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY '|'
 STORED AS TEXTFILE
-location '${HDFS_DIR}'
+location '/datalake/raw/cliente/'
 TBLPROPERTIES ("skip.header.line.count"="1");
 
 -- Tabela Gerenciada particionada

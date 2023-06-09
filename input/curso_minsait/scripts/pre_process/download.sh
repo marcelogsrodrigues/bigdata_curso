@@ -4,7 +4,7 @@ BASEDIR="$( cd "$( dirname "${BASE_SOURCE[0]}" )" && pwd )"
 CONFIG="${BASEDIR}/../../config/config.sh"
 source "${CONFIG}"
 
-echo "Iniciando a criacao em ${DATE}"
+echo "Iniciando a criacao de tabelas no HDFS em ${DATE}"
 
 for table in "${TABLES[@]}"
 do

@@ -1,6 +1,5 @@
---[produto, tbl_produto] -- id_produto|ds_produto|id_subcategoria|
 -- Tabela Externa 
-CREATE EXTERNAL TABLE IF NOT EXISTS ${TARGET_DATABASE}.produto(
+CREATE EXTERNAL TABLE IF NOT EXISTS aula_hive.produto(
   id_produto string,
   ds_produto string,
   id_subcategoria string
@@ -9,11 +8,11 @@ COMMENT 'Tabela de produto'
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY '|'
 STORED AS TEXTFILE
-location '${HDFS_DIR}'
+location '/datalake/raw/produto/'
 TBLPROPERTIES ("skip.header.line.count"="1");
 
 -- Tabela Gerenciada particionada
-CREATE TABLE IF NOT EXISTS ${TARGET_DATABASE}.tbl_produto (
+CREATE TABLE IF NOT EXISTS aula_hive.tbl_produto (
   id_produto string,
   ds_produto string,
   id_subcategoria string
@@ -29,13 +28,13 @@ set hive.exec.dynamic.partition.mode=nonstrict;
 
 -- Carga 
 INSERT OVERWRITE TABLE 
-  ${TARGET_DATABASE}.tbl_produto
+  aula_hive.tbl_produto
 PARTITION(DT_FOTO)
 SELECT
   id_produto string,
   ds_produto string,
   id_subcategoria string,
   ${PARTICAO} as DT_FOTO
-FROM ${TARGET_DATABASE}.$produto
+FROM aula_hive.produto
 ;
 

@@ -1,6 +1,5 @@
---|parceiro|tbl_parceiro|id_parceiro,nm_parceiro|
 -- Tabela Externa 
-CREATE EXTERNAL TABLE IF NOT EXISTS ${TARGET_DATABASE}.parceiro(
+CREATE EXTERNAL TABLE IF NOT EXISTS aula_hive.parceiro(
   id_parceiro string,
   nm_parceiro string
 )
@@ -8,11 +7,11 @@ COMMENT 'Tabela de parceiro'
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY '|'
 STORED AS TEXTFILE
-location '${HDFS_DIR}'
+location '/datalake/raw/parceiro/'
 TBLPROPERTIES ("skip.header.line.count"="1");
 
 -- Tabela Gerenciada particionada
-CREATE TABLE IF NOT EXISTS ${TARGET_DATABASE}.tbl_parceiro (
+CREATE TABLE IF NOT EXISTS aula_hive.tbl_parceiro (
   id_parceiro string,
   nm_parceiro string
 )
@@ -27,12 +26,12 @@ set hive.exec.dynamic.partition.mode=nonstrict;
 
 -- Carga 
 INSERT OVERWRITE TABLE 
-  ${TARGET_DATABASE}.tbl_parceiro
+  aula_hive.tbl_parceiro
 PARTITION(DT_FOTO)
 SELECT
   id_parceiro string,
   nm_parceiro string,
-  ${PARTICAO} as DT_FOTO
-FROM ${TARGET_DATABASE}.$parceiro
+  '06062023' as DT_FOTO
+FROM aula_hive.parceiro
 ;
 

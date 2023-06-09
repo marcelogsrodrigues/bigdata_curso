@@ -1,6 +1,5 @@
---[pedido, tbl_pedido] -- id_pedido|dt_pedido|id_parceiro|id_cliente|id_filial|vr_total_pago|
 -- Tabela Externa 
-CREATE EXTERNAL TABLE IF NOT EXISTS ${TARGET_DATABASE}.pedido(
+CREATE EXTERNAL TABLE IF NOT EXISTS aula_hive.pedido(
   id_pedido string,
   dt_pedido string,
   id_parceiro string,
@@ -12,11 +11,11 @@ COMMENT 'Tabela de pedido'
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY '|'
 STORED AS TEXTFILE
-location '${HDFS_DIR}'
+location '/datalake/raw/pedido/'
 TBLPROPERTIES ("skip.header.line.count"="1");
 
 -- Tabela Gerenciada particionada
-CREATE TABLE IF NOT EXISTS ${TARGET_DATABASE}.tbl_pedido (
+CREATE TABLE IF NOT EXISTS aula_hive.tbl_pedido (
   id_pedido string,
   dt_pedido string,
   id_parceiro string,
@@ -35,7 +34,7 @@ set hive.exec.dynamic.partition.mode=nonstrict;
 
 -- Carga 
 INSERT OVERWRITE TABLE 
-  ${TARGET_DATABASE}.tbl_pedido
+  aula_hive.tbl_pedido
 PARTITION(DT_FOTO)
 SELECT
   id_pedido string,
@@ -44,7 +43,7 @@ SELECT
   id_cliente string,
   id_filial string,
   vr_total_pago string,  
-  ${PARTICAO} as DT_FOTO
-FROM ${TARGET_DATABASE}.$pedido
+  '06062023' as DT_FOTO
+FROM aula_hive.pedido
 ;
 

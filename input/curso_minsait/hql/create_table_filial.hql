@@ -1,19 +1,18 @@
--- Tabela[filial|tbl_filial]|--id_filial|ds_filial|id_cidade
 -- Tabela Externa 
-CREATE EXTERNAL TABLE IF NOT EXISTS ${TARGET_DATABASE}.filial(
-    id_filial  string,
-    ds_filial  string,
-    id_cidade string
+CREATE EXTERNAL TABLE IF NOT EXISTS aula_hive.filial(
+  id_filial string,
+  ds_filial string,
+  id_cidade string
 )
 COMMENT 'Tabela de filial'
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY '|'
 STORED AS TEXTFILE
-location '${HDFS_DIR}'
+location '/datalake/raw/filial/'
 TBLPROPERTIES ("skip.header.line.count"="1");
 
 -- Tabela Gerenciada particionada
-CREATE TABLE IF NOT EXISTS ${TARGET_DATABASE}.tbl_filial (
+CREATE TABLE IF NOT EXISTS aula_hive.tbl_filial (
 id_filial string,
 ds_filial string,
 id_cidade string
@@ -29,12 +28,12 @@ set hive.exec.dynamic.partition.mode=nonstrict;
 
 -- Carga 
 INSERT OVERWRITE TABLE 
-  ${TARGET_DATABASE}.tbl_filial
+  aula_hive.tbl_filial
 PARTITION(DT_FOTO)
 SELECT
   id_filial string,
   ds_filial string,
   id_cidade string,
-  ${PARTICAO} as DT_FOTO
-FROM ${TARGET_DATABASE}.$filial
+  '06062023' as DT_FOTO
+FROM aula_hive.filial
 ;

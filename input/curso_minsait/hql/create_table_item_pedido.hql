@@ -1,6 +1,5 @@
---|item_pedido|tbl_item_pedido -- id_pedido|id_produto|quantidade|vr_unitario |
 -- Tabela Externa 
-CREATE EXTERNAL TABLE IF NOT EXISTS ${TARGET_DATABASE}.item_pedido(
+CREATE EXTERNAL TABLE IF NOT EXISTS aula_hive.item_pedido(
   id_pedido string,
   id_produto string,
   quantidade string,
@@ -10,11 +9,11 @@ COMMENT 'Tabela de item_pedido'
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY '|'
 STORED AS TEXTFILE
-location '${HDFS_DIR}'
+location '/datalake/raw/item_pedido/'
 TBLPROPERTIES ("skip.header.line.count"="1");
 
 -- Tabela Gerenciada particionada
-CREATE TABLE IF NOT EXISTS ${TARGET_DATABASE}.tbl_item_pedido (
+CREATE TABLE IF NOT EXISTS aula_hive.tbl_item_pedido (
   id_pedido string,
   id_produto string,
   quantidade string,
@@ -31,14 +30,14 @@ set hive.exec.dynamic.partition.mode=nonstrict;
 
 -- Carga 
 INSERT OVERWRITE TABLE 
-  ${TARGET_DATABASE}.tbl_item_pedido
+  aula_hive.tbl_item_pedido
 PARTITION(DT_FOTO)
 SELECT
   id_pedido string,
   id_produto string,
   quantidade string,
   vr_unitario string,
-  ${PARTICAO} as DT_FOTO
-FROM ${TARGET_DATABASE}.$item_pedido
+  '06062023' as DT_FOTO
+FROM aula_hive.item_pedido
 ;
 

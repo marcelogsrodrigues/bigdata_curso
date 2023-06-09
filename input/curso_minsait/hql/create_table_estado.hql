@@ -1,18 +1,17 @@
--- Tabela[estado|tbl_estado]|--id_estado|ds_estado|
 -- Tabela Externa 
-CREATE EXTERNAL TABLE IF NOT EXISTS ${TARGET_DATABASE}.estado(
-    id_estado  string,
-    ds_estado  string
+CREATE EXTERNAL TABLE IF NOT EXISTS aula_hive.estado(
+  id_estado  string,
+  ds_estado  string
 )
 COMMENT 'Tabela de estado'
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY '|'
 STORED AS TEXTFILE
-location '${HDFS_DIR}'
+location '/datalake/raw/estado/'
 TBLPROPERTIES ("skip.header.line.count"="1");
 
 -- Tabela Gerenciada particionada
-CREATE TABLE IF NOT EXISTS ${TARGET_DATABASE}.tbl_estado (
+CREATE TABLE IF NOT EXISTS aula_hive.tbl_estado (
 id_estado string,
 ds_estado string
 )
@@ -27,11 +26,12 @@ set hive.exec.dynamic.partition.mode=nonstrict;
 
 -- Carga 
 INSERT OVERWRITE TABLE 
-  ${TARGET_DATABASE}.tbl_estado
+  aula_hive.tbl_estado
 PARTITION(DT_FOTO)
 SELECT
   id_estado string,
-  ds_estado string
-  ${PARTICAO} as DT_FOTO
-FROM ${TARGET_DATABASE}.$estado
-;
+  ds_estado string,
+  '06062023' as DT_FOTO
+FROM aula_hive.estado;
+
+!exit;
