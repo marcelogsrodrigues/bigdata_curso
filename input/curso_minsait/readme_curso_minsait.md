@@ -2,3 +2,5 @@
 
 # clone de outro repositorio
 # git clone -b ambiente-curso https://github.com/caiuafranca/bigdata_docker.git
+
+# aula 05 - 17/06
